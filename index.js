@@ -6,13 +6,15 @@ const prisma = new PrismaClient()
 
 app.use(express.json())
 
+const { getAllProducts, getProductById } = require('./src/services/productService')
+
 
 app.get('/', (req, res) => {
     res.send('Servidor funcionando')
 })
 
 app.get('/productos', async (req,res) => {
-    const productos = await prisma.product.findMany()
+    const productos = await getAllProducts()
     res.json(productos)
 
 })
@@ -20,6 +22,22 @@ app.get('/productos', async (req,res) => {
 app.post('/productos', async (req, res) =>{
     const nuevo = await prisma.product.create({
         data: req.body
+    })
+    res.json(nuevo)
+})
+
+app.post ('/api/productos/track', async (req, res) => {
+    const producto = await getProductById(req.body.externalId)
+
+    const nuevo = await prisma.product.create({
+        data: {
+            externalId: producto.id,
+            name: producto.title,
+            imageUrl: producto.image,
+            category: producto.category,
+            price: producto.price
+        }
+        
     })
     res.json(nuevo)
 })
