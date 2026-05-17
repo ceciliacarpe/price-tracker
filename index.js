@@ -1,13 +1,15 @@
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 
+const { getAllProducts, getProductById } = require('./src/services/productService')
+const { startPriceUpdater } = require('./src/services/priceUpdater')
+
 const app = express()
 const prisma = new PrismaClient()
 
 app.use(express.json())
 
-const { getAllProducts, getProductById } = require('./src/services/productService')
-
+startPriceUpdater()
 
 app.get('/', (req, res) => {
     res.send('Servidor funcionando')
