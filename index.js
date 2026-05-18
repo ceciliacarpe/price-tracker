@@ -44,6 +44,18 @@ app.post ('/api/productos/track', async (req, res) => {
     res.json(nuevo)
 })
 
+app.get ('/api/productos/:id/historial', async (req, res) => {
+    const id = parseInt(req.params.id)
+
+    const historial = await prisma.priceHistory.findMany({
+        where: {productId: id}
+    })
+
+    res.json(historial)
+
+})
+
+
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000')
 
