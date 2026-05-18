@@ -1,3 +1,5 @@
+const cors = require('cors')
+
 const express = require('express')
 const { PrismaClient } = require('@prisma/client')
 
@@ -8,6 +10,10 @@ const app = express()
 const prisma = new PrismaClient()
 
 app.use(express.json())
+
+app.use(cors({
+  origin: 'http://localhost:5174'
+}))
 
 startPriceUpdater()
 

@@ -5,7 +5,7 @@ const {getProductById} = require ('./productService')
 const prisma = new PrismaClient()
 
 const startPriceUpdater = async () => {
-    cron.schedule('*/10 * * * * *', async () => {
+    cron.schedule('0 * * * *', async () => {
         
         const productos = await prisma.product.findMany()
 
