@@ -1,11 +1,12 @@
 const cron = require('node-cron')
 const { PrismaClient } = require ('@prisma/client')
 const {getProductById} = require ('./productService')
+const { checkPriceAlert } = require('./alertService')
 
 const prisma = new PrismaClient()
 
 const startPriceUpdater = async () => {
-    cron.schedule('0 * * * *', async () => {
+    cron.schedule('*/10 * * * * *', async () => {
         
         const productos = await prisma.product.findMany()
 
@@ -28,6 +29,9 @@ const startPriceUpdater = async () => {
                 where: { id: producto.id},
                 data: {price: precioFinal}
             })
+
+            await checkPriceAlert(producto.id, precioFinal)
+
 
             console.log(`Precio actualizado: ${producto.name} -> ${precioFinal}`)
         } 

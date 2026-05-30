@@ -22,6 +22,7 @@ model Product {
   price Float
   createAt  DateTime  @default(now()) 
   priceHistory PriceHistory[]
+  alerts Alert[]
 }
 
 model PriceHistory{
@@ -29,5 +30,14 @@ model PriceHistory{
   price Float
   recordedAt DateTime @default(now())
   productId Int
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Alert{
+  id Int @id @default(autoincrement())
+  price Float
+  createdAt DateTime @default(now())
+  productId Int
+  seen Boolean @default(false)
   product Product @relation(fields: [productId], references: [id])
 }
