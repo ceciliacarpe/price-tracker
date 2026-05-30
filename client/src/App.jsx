@@ -1,4 +1,5 @@
 import PriceChart from './PriceChart'
+import AlertList from './AlertList'
 
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
     <div>
       <h1>Price Tracker</h1>
       <PriceChart productId={2} />
+      <AlertList />
     </div>
   )
 }
