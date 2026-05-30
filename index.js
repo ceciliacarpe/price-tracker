@@ -12,7 +12,7 @@ const prisma = new PrismaClient()
 app.use(express.json())
 
 app.use(cors({
-  origin: 'http://localhost:5174'
+  origin: ['http://localhost:5173', 'http://localhost:5174']
 }))
 
 startPriceUpdater()
@@ -59,6 +59,12 @@ app.get ('/api/productos/:id/historial', async (req, res) => {
 
     res.json(historial)
 
+})
+
+app.get('/api/alertas', async (req, res) => {
+    const alertas = await prisma.alert.findMany()
+
+    res.json(alertas)
 })
 
 
