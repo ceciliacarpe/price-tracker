@@ -36,7 +36,7 @@ app.post('/productos', async (req, res) =>{
     res.json(nuevo)
 })
 
-app.post ('/api/productos/track', async (req, res) => {
+app.post ('/api/productos/track', authMiddleware, async (req, res) => {
     const producto = await getProductById(req.body.externalId)
 
     const nuevo = await prisma.product.create({
@@ -45,7 +45,8 @@ app.post ('/api/productos/track', async (req, res) => {
             name: producto.title,
             imageUrl: producto.image,
             category: producto.category,
-            price: producto.price
+            price: producto.price,
+            userId: req.userId
         }
         
     })

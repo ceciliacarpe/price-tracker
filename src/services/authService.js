@@ -32,8 +32,7 @@ const login = async (email, password) => {
 
     if (!coincide) throw new Error('Incorrect password')
 
-    const token = jwt.sign({ user: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' })
-
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' })
     return token
 
 }
