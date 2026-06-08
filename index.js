@@ -5,6 +5,8 @@ const { PrismaClient } = require('@prisma/client')
 
 const { getAllProducts, getProductById } = require('./src/services/productService')
 const { startPriceUpdater } = require('./src/services/priceUpdater')
+const { register, login } = require('./src/services/authService')
+const { authMiddleware } = require('./src/middleware/auth')
 
 const app = express()
 const prisma = new PrismaClient()
@@ -61,11 +63,35 @@ app.get ('/api/productos/:id/historial', async (req, res) => {
 
 })
 
-app.get('/api/alertas', async (req, res) => {
+app.get('/api/alertas',authMiddleware, async (req, res) => {
     const alertas = await prisma.alert.findMany()
 
     res.json(alertas)
 })
+
+app.post('/api/auth/register', async (req, res) => {
+    try{
+
+        const usuario = await register(req.body.email, req.body.password)
+        res.json(usuario)
+        
+    }catch (error){
+        res.status(400).json({error: error.message})
+    }
+})
+
+app.post('/api/auth/login', async (req, res) => {
+    try{
+
+        const token = await login(req.body.email, req.body.password)
+        res.json(token)
+
+    }catch (error){
+        res.status(400).json({error: error.message})
+    }
+})
+
+
 
 
 app.listen(3000, () => {
