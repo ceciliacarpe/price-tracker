@@ -53,6 +53,15 @@ app.post ('/api/productos/track', authMiddleware, async (req, res) => {
     res.json(nuevo)
 })
 
+app.get ('/api/productos/mis-productos', authMiddleware, async (req, res) => {
+
+    const productos = await prisma.product.findMany({
+        where: { userId: req.userId}
+    })
+
+    res.json(productos)
+})
+
 app.get ('/api/productos/:id/historial', async (req, res) => {
     const id = parseInt(req.params.id)
 

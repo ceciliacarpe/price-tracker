@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const AlertList= () => {
+const AlertList= ({ token }) => {
   const [alertas, setAlert] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
-        const response = await axios.get(`http://localhost:3000/api/alertas`)
+        const response = await axios.get(`http://localhost:3000/api/alertas`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         setAlert(response.data)
     }
     fetchData()
