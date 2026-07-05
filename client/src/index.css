@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-lava: #9e2a2b;
+  --color-red: #c1121f;
+  --color-cream: #fdfffc;
+  --color-navy: #003049;
+  --color-steel: #669bbc;
+}
+body {
+  font-family: 'Noto Serif', serif;
+  background-color: #fdf0d5;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+}
