@@ -3,16 +3,28 @@ import axios from 'axios'
 
 const AlertList = ({ token }) => {
   const [alertas, setAlert] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('http://localhost:3000/api/alertas', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      setAlert(response.data.slice(-5).reverse())
+        try{
+            const response = await axios.get('http://localhost:3000/api/alertas', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        setAlert(response.data.slice(-5).reverse())
+        }catch (error){
+            setError('Error al cargar las alertas')
+        }finally{
+            setLoading(false)
+        }
+      
     }
     fetchData()
   }, [])
+
+  if (loading) return <p className="text-steel text-sm">Cargando alertas...</p>
+  if (error) return <p className="text-red text-sm">{error}</p>
 
   return (
     <div className="grid grid-cols-5 gap-3 mt-2">

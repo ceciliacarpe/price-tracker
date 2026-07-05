@@ -3,16 +3,28 @@ import axios from 'axios'
 
 const ProductList = ({ token, onSelect }) => {
   const [productos, setProductList] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('http://localhost:3000/api/productos/mis-productos', {
+      try{
+        const response = await axios.get('http://localhost:3000/api/productos/mis-productos', {
         headers: { Authorization: `Bearer ${token}` }
       })
       setProductList(response.data)
+      }catch (error){
+        setError('Error al cargar los productos')
+      }finally{
+        setLoading(false)
+      }
+      
     }
     fetchData()
   }, [token])
+
+  if (loading) return <p className="text-steel text-sm">Cargando productos...</p>
+  if (error) return <p className="text-red text-sm">{error}</p>
 
   return (
     <div className="grid grid-cols-3 gap-4">
