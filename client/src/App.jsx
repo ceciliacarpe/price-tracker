@@ -2,15 +2,22 @@ import PriceChart from './PriceChart'
 import AlertList from './AlertList'
 import Login from './Login'
 import ProductList from './ProductList'
+import AddProduct from './AddProduct'
 import { useState } from 'react'
 
 function App() {
-  const [token, setToken] = useState(null)
+  const [token, setToken] = useState(localStorage.getItem('token'))
   const [productoId, setProductoId] = useState(null)
   const [alertasOpen, setAlertasOpen] = useState(false)
+  const [showAddProduct, setShowAddProduct] = useState(false)
+
+  const [refresh, setRefresh] = useState(0)
 
   if (!token) {
-    return <Login onLogin={(t) => setToken(t)} />
+    return <Login onLogin={(t) => {
+          localStorage.setItem('token', t)
+          setToken(t)
+        }} />
   }
 
   return (
@@ -20,7 +27,10 @@ function App() {
       <nav className="border-b border-steel/20 bg-white/60 backdrop-blur-sm px-12 py-4 flex justify-between items-center sticky top-0 z-10">
         <span className="text-navy font-bold text-lg tracking-tight">Price Tracker</span>
         <button
-          onClick={() => setToken(null)}
+          onClick={() => {
+            localStorage.removeItem('token')
+            setToken(null)
+          }}
           className="text-xs text-steel hover:text-red transition-colors"
         >
           Cerrar sesión
@@ -29,22 +39,39 @@ function App() {
 
       <div className="px-12 py-10">
 
-        {/* Header */}
-        <div className="flex justify-between items-end mb-14">
-          <div>
-            <p className="text-xs text-steel uppercase tracking-widest mb-3">Dashboard</p>
-            <h1 className="text-7xl font-bold text-lava leading-none">
-              Tus<br />productos
-            </h1>
-          </div>
-          <div className="max-w-sm text-right pb-2">
-            <p className="text-steel leading-relaxed">
-              Sigue los cambios de precio de los productos que te interesan. <br /><br />
-              Podrás ver cuando el precio cae de verdad.
-            </p>
-          </div>
+      {/* Header */}
+      <div className="flex justify-between items-end mb-14">
+        <div>
+          <p className="text-xs text-steel uppercase tracking-widest mb-3">Dashboard</p>
+          <h1 className="text-7xl font-bold text-lava leading-none">
+            Tus<br />productos
+          </h1>
         </div>
 
+        <button
+          onClick={() => setShowAddProduct(!showAddProduct)}
+          className="text-xs border border-navy text-navy px-4 py-2 rounded-lg hover:bg-navy hover:text-cream transition-colors self-center"
+        >
+          {showAddProduct ? 'Cerrar' : '+ Añadir producto'}
+        </button>
+
+        <div className="max-w-sm text-right pb-2">
+          <p className="text-steel leading-relaxed">
+            Sigue los cambios de precio de los productos que te interesan.<br /><br />
+            Podrás ver cuando el precio cae de verdad.
+          </p>
+        </div>
+      </div>
+
+      {showAddProduct && (
+        <div className="mb-10">
+          <AddProduct token={token} onProductAdded={() => {
+            setShowAddProduct(false)
+            setRefresh(r => r + 1)
+          }} />
+        </div>
+      )}
+         
         {/* Lista de productos */}
         <div className="mb-10">
           <h2 className="text-xs font-semibold text-steel uppercase tracking-widest mb-5">
@@ -52,6 +79,7 @@ function App() {
           </h2>
           <ProductList
             token={token}
+            refresh={refresh}
             onSelect={(id) => setProductoId(productoId === id ? null : id)}
           />
         </div>

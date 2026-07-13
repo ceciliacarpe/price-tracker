@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const ProductList = ({ token, onSelect }) => {
+const ProductList = ({ token, onSelect, refresh }) => {
   const [productos, setProductList] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -21,7 +21,7 @@ const ProductList = ({ token, onSelect }) => {
       
     }
     fetchData()
-  }, [token])
+  }, [token, refresh])
 
   if (loading) return <p className="text-steel text-sm">Cargando productos...</p>
   if (error) return <p className="text-red text-sm">{error}</p>

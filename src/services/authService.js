@@ -3,20 +3,14 @@ const jwt = require('jsonwebtoken')
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-const register = async  (email, password) => {
-   const hash = await bcrypt.hash(password, 10) 
-
-   const nuevo = await prisma.user.create({
-        data: {
-            email: email,
-            password: hash,
-        }
-    })
-
-    return nuevo 
-
+const register = async (email, password) => {
+  const hash = await bcrypt.hash(password, 10)
+  const nuevo = await prisma.user.create({
+    data: { email, password: hash }
+  })
+  const token = jwt.sign({ userId: nuevo.id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+  return token
 }
-
 const login = async (email, password) => {
     const user = await prisma.user.findUnique(
         {

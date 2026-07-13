@@ -5,15 +5,20 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
+  const [modo, setModo] = useState('login')
 
-  const handleSubmit = async () => {
-    try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password })
-      onLogin(response.data)
-    } catch (e) {
-      setError('Email o contraseña incorrectos')
-    }
+ const handleSubmit = async () => {
+  try {
+    const url = modo === 'login' 
+      ? 'http://localhost:3000/api/auth/login'
+      : 'http://localhost:3000/api/auth/register'
+    
+    const response = await axios.post(url, { email, password })
+    onLogin(response.data)
+  } catch (e) {
+    setError(modo === 'login' ? 'Email o contraseña incorrectos' : 'Error al crear la cuenta')
   }
+}
 
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center">
@@ -41,7 +46,13 @@ const Login = ({ onLogin }) => {
             onClick={handleSubmit}
             className="w-full bg-navy text-cream py-3 rounded-lg font-medium hover:bg-lava transition-colors duration-200 text-sm"
           >
-            Entrar
+            {modo === 'login' ? 'Entrar' : 'Crear cuenta'}
+          </button>
+          <button
+            onClick={() => setModo(modo === 'login' ? 'register' : 'login')}
+            className="w-full text-center text-xs text-steel hover:text-navy mt-4 transition-colors"
+          >
+            {modo === 'login' ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
           </button>
         </div>
       </div>
