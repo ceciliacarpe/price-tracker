@@ -14,9 +14,20 @@ const prisma = new PrismaClient()
 app.use(express.json())
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175',  'https://price-tracker-production-bcbe.up.railway.app', 'https://price-tracker-nu-olive.vercel.app']
+  origin: (origin, callback) => {
+    const allowed = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'https://price-tracker-nu-olive.vercel.app'
+    ]
+    if (!origin || allowed.includes(origin) || origin.endsWith('.vercel.app')) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
 }))
-
 startPriceUpdater()
 
 app.get('/', (req, res) => {
