@@ -14,7 +14,7 @@ const prisma = new PrismaClient()
 app.use(express.json())
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175']
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175',  'https://price-tracker-production-bcbe.up.railway.app', 'https://price-tracker-nu-olive.vercel.app']
 }))
 
 startPriceUpdater()
@@ -132,6 +132,6 @@ app.use((err, req, res, next) => {
 
 
 app.listen(3000, () => {
-    console.log('Servidor corriendo en http://localhost:3000')
+    console.log('Servidor corriendo en ${import.meta.env.VITE_API_URL}')
 
 })

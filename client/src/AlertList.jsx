@@ -9,7 +9,7 @@ const AlertList = ({ token, productId }) => {
   useEffect(() => {
     const fetchData = async () => {
         try{
-            const response = await axios.get(`http://localhost:3000/api/alertas?productId=${productId}`, {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/alertas?productId=${productId}`, {
               headers: { Authorization: `Bearer ${token}` }
       })
         setAlert(response.data.slice(-5).reverse())

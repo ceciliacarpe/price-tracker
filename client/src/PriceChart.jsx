@@ -10,7 +10,7 @@ const [error, setError] = useState(null)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/productos/${productId}/historial`)
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/productos/${productId}/historial`)
         setHistorial(response.data)
       } catch (error) {
         setError('Error al cargar el historial de precios')

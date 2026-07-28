@@ -9,7 +9,7 @@ const ProductList = ({ token, onSelect, refresh }) => {
   useEffect(() => {
     const fetchData = async () => {
       try{
-        const response = await axios.get('http://localhost:3000/api/productos/mis-productos', {
+        const response = await axios.get('${import.meta.env.VITE_API_URL}/api/productos/mis-productos', {
         headers: { Authorization: `Bearer ${token}` }
       })
       setProductList(response.data)
