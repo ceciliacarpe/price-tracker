@@ -37,20 +37,30 @@ app.post('/productos', async (req, res) =>{
 })
 
 app.post ('/api/productos/track', authMiddleware, async (req, res) => {
-    const producto = await getProductById(req.body.externalId)
+    try{
+        const producto = await getProductById(req.body.externalId)
 
-    const nuevo = await prisma.product.create({
-        data: {
-            externalId: producto.id,
-            name: producto.title,
-            imageUrl: producto.image,
-            category: producto.category,
-            price: producto.price,
-            userId: req.userId
+        const nuevo = await prisma.product.create({
+            data: {
+                externalId: producto.id,
+                name: producto.title,
+                imageUrl: producto.image,
+                category: producto.category,
+                price: producto.price,
+                userId: req.userId
+            }
+            
+        })
+        res.json(nuevo)
+
+    }catch (error){
+        if (error.code == 'P2002'){
+            res.status(400).json({error: 'El producto ya está siendo seguido'})
+        }else{
+            res.status(500).json({error: error.message})
         }
-        
-    })
-    res.json(nuevo)
+    }
+    
 })
 
 app.get ('/api/productos/mis-productos', authMiddleware, async (req, res) => {
@@ -74,8 +84,18 @@ app.get ('/api/productos/:id/historial', async (req, res) => {
 })
 
 app.get('/api/alertas',authMiddleware, async (req, res) => {
-    const alertas = await prisma.alert.findMany()
+    try{
+        const {productId} = req.query
+        const alertas = await prisma.alert.findMany({
+        where: {
+            ...(productId && { productId: parseInt(productId) })
+        }
+        })
 
+        res.json(alertas)
+    }catch (error){
+        res.status(500).json({error: error.message})
+    }
     res.json(alertas)
 })
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const AlertList = ({ token }) => {
+const AlertList = ({ token, productId }) => {
   const [alertas, setAlert] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -9,9 +9,9 @@ const AlertList = ({ token }) => {
   useEffect(() => {
     const fetchData = async () => {
         try{
-            const response = await axios.get('http://localhost:3000/api/alertas', {
-            headers: { Authorization: `Bearer ${token}` }
-        })
+            const response = await axios.get(`http://localhost:3000/api/alertas?productId=${productId}`, {
+              headers: { Authorization: `Bearer ${token}` }
+      })
         setAlert(response.data.slice(-5).reverse())
         }catch (error){
             setError('Error al cargar las alertas')
@@ -21,7 +21,7 @@ const AlertList = ({ token }) => {
       
     }
     fetchData()
-  }, [])
+  }, [productId])
 
   if (loading) return <p className="text-steel text-sm">Cargando alertas...</p>
   if (error) return <p className="text-red text-sm">{error}</p>

@@ -109,7 +109,7 @@ function App() {
               </button>
               {alertasOpen && (
                 <div className="px-8 pb-8">
-                  <AlertList token={token} />
+                  <AlertList token={token} productId={productoId}/>
                 </div>
               )}
             </div>

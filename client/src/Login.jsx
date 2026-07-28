@@ -8,14 +8,19 @@ const Login = ({ onLogin }) => {
   const [modo, setModo] = useState('login')
 
  const handleSubmit = async () => {
+    console.log('handleSubmit ejecutado', email, password)
+
   try {
     const url = modo === 'login' 
       ? 'http://localhost:3000/api/auth/login'
       : 'http://localhost:3000/api/auth/register'
     
     const response = await axios.post(url, { email, password })
+    console.log('response.data:', response.data)
+
     onLogin(response.data)
   } catch (e) {
+    console.log('error:', e)
     setError(modo === 'login' ? 'Email o contraseña incorrectos' : 'Error al crear la cuenta')
   }
 }
