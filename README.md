@@ -4,6 +4,10 @@ A full-stack web application that tracks product prices and detects real discoun
 
 ![Price Tracker Screenshot](docs/pantalla.png)
 
+## Live Demo
+
+[https://price-tracker-nu-olive.vercel.app](https://price-tracker-nu-olive.vercel.app)
+
 ## The Problem
 
 Most online "sales" are not real discounts. Price Tracker stores historical price data and alerts you only when a price genuinely drops below its 90-day baseline — not just when a store labels something as on sale.
@@ -88,6 +92,16 @@ if (precioActual < percentil20) {
   // create alert
 }
 ```
+
+## Technical Decisions
+
+**FakeStore API over web scraping** — Scraping is fragile in production; major retailers actively block bots. Using an official API guarantees reliability and uptime.
+
+**Percentile-based alerts over fixed thresholds** — A fixed threshold doesn't account for natural price variation. The 20th percentile of 90-day history adapts to each product's real price range.
+
+**JWT over session-based auth** — Stateless authentication scales better and works naturally with separate frontend/backend deployments.
+
+**Prisma over raw SQL** — Type-safe queries and automatic migrations reduce errors and speed up development without hiding what's happening in the database.
 
 ## Author
 
