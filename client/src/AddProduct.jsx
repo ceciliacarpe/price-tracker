@@ -27,7 +27,7 @@ const AddProduct = ({ token, onProductAdded }) => {
 
   const handleAdd = async (externalId) => {
     try {
-        await axios.post('${import.meta.env.VITE_API_URL}/api/productos/track',
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/productos/track',
         { externalId },
         { headers: { Authorization: `Bearer ${token}` } }
         )
