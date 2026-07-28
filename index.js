@@ -28,8 +28,9 @@ app.use(cors({
     }
   }
 }))
-startPriceUpdater()
-
+if (process.env.NODE_ENV !== 'test') {
+  startPriceUpdater()
+}
 app.get('/', (req, res) => {
     res.send('Servidor funcionando')
 })
@@ -140,9 +141,9 @@ app.use((err, req, res, next) => {
 })
 
 
-
+module.exports = app
 
 app.listen(3000, () => {
-    console.log('Servidor corriendo en ${import.meta.env.VITE_API_URL}')
+    console.log('Servidor corriendo en http://localhost:3000')
 
 })
